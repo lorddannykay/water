@@ -12,7 +12,7 @@ export const SEED_SITES: WaterSite[] = [
     name: 'Tamiraparani River',
     coords: [8.65, 77.85],
     type: 'River',
-    story: 'Flows through the Porunai basin and Tirunelveli — the ancestral river at the heart of this project.',
+    story: 'Flows through the Porunai basin, Tirunelveli and Thoothukudi — the ancestral river at the heart of this project.',
   },
   {
     id: 2,

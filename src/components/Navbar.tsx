@@ -25,10 +25,10 @@ export function Navbar() {
           type="button"
           onClick={() => scrollToSection('home')}
           className="group flex min-w-0 flex-col items-start gap-0.5 text-left"
-          aria-label="Project Neer — go to home"
+          aria-label="The Water Heritage Project — go to home"
         >
           <span className="font-tamil text-sm leading-tight text-ink transition-colors group-hover:text-accent sm:text-base">
-            Project Neer
+            The Water Heritage Project
           </span>
           <span className="font-sans text-[10px] font-semibold tracking-[0.2em] text-dim uppercase sm:text-xs">
             Mapping Water Heritage

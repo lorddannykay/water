@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="relative z-10 border-t border-border bg-surface/60 py-12 backdrop-blur-sm">
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
         <div>
-          <p className="font-serif text-2xl text-ink">Project Neer</p>
+          <p className="font-serif text-2xl text-ink">The Water Heritage Project</p>
           <p className="mt-1 font-sans text-xs tracking-[0.2em] text-dim uppercase">
             Mapping Water Heritage
           </p>
@@ -32,7 +32,7 @@ export function Footer() {
         </nav>
 
         <div className="flex flex-col justify-end gap-2 text-right md:text-left">
-          <p className="text-xs text-dim">&copy; 2026 Project Neer</p>
+          <p className="text-xs text-dim">&copy; 2026 The Water Heritage Project</p>
           <p className="font-body text-sm text-dim italic">
             Documentation in progress. Always will be.
           </p>

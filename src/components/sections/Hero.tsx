@@ -46,9 +46,9 @@ export function Hero() {
         </div>
 
         <SectionInner>
-          <motion.div style={{ opacity }} className="relative pt-2 pb-4 md:pt-4 md:pb-8">
+          <motion.div style={{ opacity }} className="relative pt-2 pb-20 md:pt-4 md:pb-28">
             <p
-              className="pointer-events-none absolute top-0 -left-2 max-w-[100vw] overflow-hidden font-tamil text-[clamp(3.5rem,14vw,9rem)] leading-none text-accent/15 select-none md:-left-4"
+              className="pointer-events-none absolute top-0 -left-2 max-w-[100vw] font-tamil text-[clamp(3.5rem,14vw,9rem)] leading-[1.35] text-accent/15 select-none md:-left-4 [padding-block:0.12em]"
               aria-hidden
             >
               நீரே வாழ்வு
@@ -57,7 +57,7 @@ export function Hero() {
             <motion.div style={{ y: titleY }} className="relative">
               <span className="mb-6 flex items-center gap-3 text-[11px] font-bold tracking-[0.4em] text-accent uppercase">
                 <span className="h-px w-10 bg-accent" />
-                Project Neer
+                The Water Heritage Project
               </span>
 
               <h1 className="perspective-text max-w-[18ch] font-serif text-5xl leading-[0.9] font-light tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl">
@@ -116,6 +116,30 @@ export function Hero() {
             </motion.div>
           </motion.div>
         </SectionInner>
+        {/* Animated wave separator */}
+        <div className="hero-waves" aria-hidden>
+        <svg
+          viewBox="0 0 1440 90"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            className="wave-path wave-path--1"
+            d="M0 45 C180 10 360 80 540 45 C720 10 900 80 1080 45 C1260 10 1440 80 1620 45 C1800 10 1980 80 2160 45 C2340 10 2520 80 2700 45 C2880 10 2880 80 2880 45 L2880 90 L0 90 Z"
+            fill="rgba(127,182,154,0.07)"
+          />
+          <path
+            className="wave-path wave-path--2"
+            d="M0 55 C160 25 320 75 480 55 C640 25 800 75 960 55 C1120 25 1280 75 1440 55 C1600 25 1760 75 1920 55 C2080 25 2240 75 2400 55 C2560 25 2720 75 2880 55 L2880 90 L0 90 Z"
+            fill="rgba(139,184,212,0.07)"
+          />
+          <path
+            className="wave-path wave-path--3"
+            d="M0 60 C200 35 400 78 600 60 C800 35 1000 78 1200 60 C1400 35 1600 78 1800 60 C2000 35 2200 78 2400 60 C2600 35 2800 78 2880 60 L2880 90 L0 90 Z"
+            fill="rgba(127,182,154,0.05)"
+          />
+        </svg>
+        </div>
       </div>
 
       <SectionInner className="mt-12 md:mt-16">

@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { FormEvent, useRef, useState } from 'react';
-import { Mail } from 'lucide-react';
+import { Mail, Plus } from 'lucide-react';
 import { Section, SectionInner } from '../Section';
 import { FormToast } from '../ui/FormToast';
 import { scrollToSection } from '../../lib/utils';
@@ -45,16 +45,20 @@ export function Contribute() {
           >
           <span className="text-xs font-bold tracking-[0.4em] text-accent uppercase">Contribute</span>
           <h2 className="mt-4 font-serif text-4xl leading-tight text-ink md:text-5xl">
-            You are carrying something this atlas needs.
+            You know a place this atlas is looking for.
           </h2>
           <p className="mt-6 font-body text-lg leading-relaxed text-dim">
-            A place name that exists only in your family. A tank that has no entry in any government
-            record. A water site you pass every day without realising what it once was, or still is.
-          </p>
-          <p className="mt-4 font-body text-lg leading-relaxed text-dim">
-            That knowledge is not small. It is exactly what Project Neer runs on. Water memory is
+            That knowledge is not small. It is exactly what The Water Heritage Project runs on. Water memory is
             made of exactly those fragments.
           </p>
+          <button
+            type="button"
+            onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="btn-primary btn-ripple mt-8"
+          >
+            <Plus className="h-4 w-4" aria-hidden />
+            Add a Water Site
+          </button>
 
           <form
             ref={formRef}

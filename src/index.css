@@ -354,11 +354,54 @@ html {
   }
 }
 
-/* About marquee track */
-.marquee-track {
-  display: flex;
-  white-space: nowrap;
+/* Hero animated waves */
+.hero-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.hero-waves svg {
+  display: block;
+  width: calc(200% + 2px);
+}
+
+.wave-path {
+  animation: wave-flow linear infinite;
+  transform-origin: left center;
   will-change: transform;
+}
+
+.wave-path--1 {
+  animation-duration: 14s;
+}
+
+.wave-path--2 {
+  animation-duration: 20s;
+  animation-direction: reverse;
+}
+
+.wave-path--3 {
+  animation-duration: 26s;
+}
+
+@keyframes wave-flow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-path {
+    animation: none;
+  }
 }
 
 /* Leaflet overrides */
@@ -382,13 +425,13 @@ html {
 }
 
 .water-map-marker {
-  background: var(--color-accent);
+  background: var(--color-ink);
   border: 2px solid white;
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
   width: 28px;
   height: 28px;
-  box-shadow: 0 4px 12px rgba(127, 182, 154, 0.4);
+  box-shadow: 0 4px 12px rgba(30, 45, 37, 0.35);
 }
 
 /* Toast */
