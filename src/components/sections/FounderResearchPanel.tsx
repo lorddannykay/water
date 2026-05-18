@@ -61,10 +61,10 @@ export function FounderResearchPanel() {
         Kulams along the Thamirabarani
       </h4>
       <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
-        For over a decade, Saranya has researched the man-made kulam water network along the
-        Thamirabarani, from Tirunelveli to Thoothukudi. Built to store flood waters and sustain
-        communities through drought, these systems embody a climate-adaptive heritage that still
-        feeds hundreds of thousands of acres today.
+        For over a decade, Saranya has studied the man-made kulam network along the Thamirabarani,
+        from Tirunelveli to Thoothukudi. The Pandyas and later rulers built these tanks and canals
+        to catch flood water and carry villages through drought. The same system still irrigates
+        large parts of the basin today.
       </p>
       <blockquote className="mt-6 border-l-2 border-accent/50 py-1 pl-5 font-serif text-lg leading-relaxed text-ink italic md:text-xl">
         &ldquo;It is a climate-adaptive mechanism which needs to be adapted even now for climate
@@ -84,8 +84,8 @@ export function FounderResearchPanel() {
           >
             {press.subtitle}
           </a>
-          {press.year ? ` (${press.year})` : ''}, reporting on reviving kulams to meet climate
-          change across the Thamirabarani river course.
+          {press.year ? ` (${press.year})` : ''}, on reviving kulams as a response to climate
+          stress along the Thamirabarani.
         </p>
       ) : null}
 

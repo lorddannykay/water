@@ -9,13 +9,13 @@ export function Collective() {
           No river runs alone.
         </h2>
         <p className="mt-6 max-w-3xl font-body text-lg leading-relaxed text-dim">
-          Behind The Water Heritage Project is a wider circle. Researchers and conservationists. Historians and
-          teachers. Writers and farmers. People who grew up near water and never quite left it
-          behind.
+          The project draws on a wider circle of researchers, conservationists, historians,
+          teachers, writers, and farmers, including many who grew up near water and still think about
+          it daily.
         </p>
         <p className="mt-4 max-w-3xl font-body text-lg leading-relaxed text-dim">
-          We bring different knowledge and ask each other hard questions. We share what we find and
-          sit with what we don&apos;t understand.
+          We work across different disciplines, share findings as we go, and stay honest about what
+          we do not yet know.
         </p>
       </SectionInner>
     </Section>

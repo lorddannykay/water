@@ -1,0 +1,19 @@
+export type SiteTypeOption = {
+  value: string;
+  labelEn: string;
+  labelTa: string;
+};
+
+/** Stored in DB as English `value`; shown bilingually in the UI. */
+export const SITE_TYPES: SiteTypeOption[] = [
+  { value: 'River', labelEn: 'River', labelTa: 'ஆறு' },
+  { value: 'Tank', labelEn: 'Tank', labelTa: 'குளம்' },
+  { value: 'Sacred Pond', labelEn: 'Sacred Pond', labelTa: 'திருக்குளம்' },
+  { value: 'Spring', labelEn: 'Spring', labelTa: 'நீரூற்று' },
+  { value: 'Channel', labelEn: 'Channel', labelTa: 'கால்வாய்' },
+  { value: 'Other', labelEn: 'Other', labelTa: 'மற்றவை' },
+];
+
+export function formatSiteTypeLabel(option: SiteTypeOption): string {
+  return `${option.labelTa} · ${option.labelEn}`;
+}

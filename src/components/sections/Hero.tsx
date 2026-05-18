@@ -85,13 +85,13 @@ export function Hero() {
 
               <div className="mt-10 max-w-2xl space-y-6 font-body text-lg leading-relaxed text-dim md:text-xl">
                 <p>
-                  Water remembers the fields it fed, the temples it circled, the hands that tended
-                  its banks at dawn. It remembers every community that built its life around it,
-                  every name it was given, every ritual performed at its edge.
+                  It holds the fields it once fed, the temples along its bend, the hands that met at
+                  dawn on its banks. Whole communities shaped their days around it, gave it names,
+                  kept rituals at its edge.
                 </p>
                 <p>
-                  We are mapping that memory. And we are inviting everyone who carries one to add it
-                  here.
+                  This atlas tries to draw that memory onto a map. If you carry a piece of it, we
+                  would like you to add it here.
                 </p>
               </div>
 
@@ -154,17 +154,15 @@ export function Hero() {
               Mapping Water
             </h2>
             <p className="mt-6 font-serif text-2xl leading-snug text-ink md:text-3xl">
-              Not all heritage looks like heritage.
+              Heritage does not always announce itself.
             </p>
             <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
-              Some of it is grand. Most of it isn&apos;t. A low mud bund holding back a field. A
-              tank so familiar to its village that no one thinks to photograph it. A spring with a
-              name that lives only in the mouths of elders. A channel, hand-cut, still flowing,
-              still feeding.
+              Some sites are famous. Most are ordinary: a mud bund holding back a field, a kulam so
+              familiar its village stopped photographing it, a spring named only in elders&apos;
+              stories, a hand-cut channel still carrying water through the dry months.
             </p>
             <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
-              These are not lesser places. They are the places that kept people alive. That still
-              do.
+              None of these are lesser. They are what kept people fed, and many still do.
             </p>
           </div>
         </motion.div>

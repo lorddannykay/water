@@ -6,12 +6,12 @@ const FOUNDERS = [
   {
     name: 'Saranya Dharshini',
     role: 'Co-founder',
-    bio: 'Saranya is an architect trained in conservation with over fifteen years of experience working across India and the UK. Her research on the kulam water network along the Thamirabarani informs this atlas. Her expertise spans UNESCO World Heritage Sites, historic and sacred architecture, museum design, and architectural conservation. As Vice President of ICOMOS International Scientific Committee on Water and Heritage, she works at the intersection of policy, place, and people. Guided by a philosophy of giving back to society, she advocates for people-centred conservation practices anchored in traditional knowledge systems and community engagement.',
+    bio: 'Saranya is an architect trained in conservation with over fifteen years of experience across India and the UK. Her research on the kulam network along the Thamirabarani informs this atlas. She has worked on UNESCO World Heritage Sites, historic and sacred architecture, museum design, and conservation projects at every scale. As Vice President of the ICOMOS International Scientific Committee on Water and Heritage, she connects policy with place and community. Her practice is rooted in traditional knowledge and the people who still maintain it.',
   },
   {
     name: 'K. Porchelvi',
     role: 'Co-founder',
-    bio: 'Porchelvi brings forty years of experience as an educator, retiring as a headmistress after a career devoted to working with communities and children. She carries within her a living archive of Tamil literature, oral histories, and the stories that pass between generations. She knows what was handed down and understands, with quiet urgency, why it cannot stop here.',
+    bio: 'Porchelvi spent forty years as an educator and headmistress, working closely with communities and children across Tamil Nadu. She holds a deep store of Tamil literature, oral histories, and the stories families pass on without writing them down. She knows what was handed down, and why it cannot end with her generation.',
   },
 ] as const;
 
@@ -40,18 +40,19 @@ export function About() {
         >
           <div className="space-y-6 font-body text-lg leading-relaxed text-dim">
             <p>
-              For our founders, that is not geography. That is ancestry.
+              Our founders grew up on that river. For them, the Tamiraparani is family history long
+              before it is a line on a map.
             </p>
             <p>
-              This project grew from that intimacy. From the understanding that water systems are
-              not merely ecological. They are the shape of a civilisation. The record of how people
-              organised themselves, fed themselves, and made meaning together across centuries.
+              The project began in that closeness: the sense that water systems hold more than
+              hydrology. They carry how a civilisation organised food, labour, worship, and daily
+              life together over centuries.
             </p>
             <p>
-              Tamil Nadu&apos;s water heritage is vast and so much of it exists outside the
-              boundaries of what we have been taught to call heritage. Just structures and systems that have quietly held communities together for
-              generations, now facing encroachment, neglect, and a climate that is changing faster
-              than we can keep up.
+              Tamil Nadu&apos;s water heritage is larger than any single register. Much of it was
+              never listed: bunds, kulams, and channels that have served villages for generations,
+              now under pressure from encroachment, neglect, and a climate shifting faster than
+              repair work can follow.
             </p>
           </div>
 
