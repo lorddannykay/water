@@ -12,7 +12,7 @@ export const SEED_SITES: WaterSite[] = [
     name: 'Tamiraparani River',
     coords: [8.65, 77.85],
     type: 'River',
-    story: 'Flows through the Porunai basin, Tirunelveli and Thoothukudi — the ancestral river at the heart of this project.',
+    story: 'Flows through the Porunai basin, Tirunelveli and Thoothukudi, the ancestral river at the heart of this project.',
   },
   {
     id: 2,
@@ -40,6 +40,6 @@ export const SEED_SITES: WaterSite[] = [
     name: 'Sivagalai Channel',
     coords: [8.55, 78.1],
     type: 'Channel',
-    story: 'Hand-cut, still flowing, still feeding — water heritage without a protected status.',
+    story: 'Hand-cut, still flowing, still feeding. Water heritage without a protected status.',
   },
 ];

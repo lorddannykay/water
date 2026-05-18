@@ -22,7 +22,7 @@ export function Atlas() {
         </p>
         <p className="mt-4 max-w-2xl font-body text-lg leading-relaxed text-dim">
           In a changing climate, all of that is not just history. It is instruction. This map is
-          our attempt to hold it — built not by institutions but by the people who know these places
+          our attempt to hold it, built not by institutions but by the people who know these places
           best. By you.
         </p>
 
@@ -41,7 +41,7 @@ export function Atlas() {
             Put your water heritage site on the map.
           </h3>
           <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
-            It might be a tank you bathed in as a child. A sacred pond next to a temple or only known
+            It might be a Kulam you bathed in as a child. A sacred pond next to a temple or only known
             to the locals. A river bend your village has always gathered at. A structure so humble it has
             never been photographed.
           </p>

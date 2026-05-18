@@ -28,7 +28,7 @@ export function Contribute() {
     }
 
     form.reset();
-    setToast('Thank you — your water memory has been received. We will review it soon.');
+    setToast('Thank you. Your water memory has been received. We will review it soon.');
     setTimeout(() => setToast(null), 5000);
   };
 
@@ -129,7 +129,7 @@ export function Contribute() {
               <textarea
                 id="story"
                 name="story"
-                placeholder="One sentence or a lifetime of memory — whatever you have."
+                placeholder="One sentence or a lifetime of memory, whatever you have."
                 className="form-textarea"
               />
             </div>

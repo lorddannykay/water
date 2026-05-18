@@ -117,7 +117,7 @@ export function Contact() {
           </form>
 
           <p className="mt-16 font-serif text-xl text-ink italic md:text-2xl">
-            Water remembers. Heritage lives.
+            Water remembers.
           </p>
           </motion.div>
         </SectionInner>

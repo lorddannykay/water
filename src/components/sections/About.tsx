@@ -1,11 +1,12 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Section, SectionInner } from '../Section';
+import { FounderResearchPanel } from './FounderResearchPanel';
 
 const FOUNDERS = [
   {
     name: 'Saranya Dharshini',
     role: 'Co-founder',
-    bio: 'Saranya is an architect and conservation specialist with over fifteen years of experience working across India and the UK. As Vice President of ICOMOS International Scientific Committee on Water and Heritage, she works at the intersection of policy, place, and people. Her expertise spans UNESCO World Heritage Sites, historic and sacred architecture, museum design, and architectural conservation. Guided by a philosophy of giving back to society, she advocates for people-centred conservation practices anchored in traditional knowledge systems and community engagement.',
+    bio: 'Saranya is an architect trained in conservation with over fifteen years of experience working across India and the UK. Her research on the kulam water network along the Thamirabarani informs this atlas. Her expertise spans UNESCO World Heritage Sites, historic and sacred architecture, museum design, and architectural conservation. As Vice President of ICOMOS International Scientific Committee on Water and Heritage, she works at the intersection of policy, place, and people. Guided by a philosophy of giving back to society, she advocates for people-centred conservation practices anchored in traditional knowledge systems and community engagement.',
   },
   {
     name: 'K. Porchelvi',
@@ -39,9 +40,7 @@ export function About() {
         >
           <div className="space-y-6 font-body text-lg leading-relaxed text-dim">
             <p>
-              The Tamiraparani flows through the Porunai basin, through Tirunelveli and Thoothukudi, through the
-              memory of every family that has ever lived on its banks. For our founders, that is
-              not geography. That is ancestry.
+              For our founders, that is not geography. That is ancestry.
             </p>
             <p>
               This project grew from that intimacy. From the understanding that water systems are
@@ -66,7 +65,7 @@ export function About() {
               draggable={false}
             />
             <blockquote className="relative z-10 px-6 text-center font-serif text-xl leading-relaxed text-ink italic md:text-2xl">
-              &ldquo;My ancestors are from the Porunai basin—the valley of the Tamiraparani River
+              &ldquo;My ancestors are from the Porunai basin, the valley of the Tamiraparani River
               in Tirunelveli and Thoothukudi.&rdquo;
             </blockquote>
           </motion.div>
@@ -91,6 +90,7 @@ export function About() {
               </motion.article>
             ))}
           </div>
+          <FounderResearchPanel />
         </div>
       </SectionInner>
     </Section>
