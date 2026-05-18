@@ -9,6 +9,7 @@ import {
   type AddressSuggestion,
   type LocationSource,
 } from '../../lib/geo';
+import { useTranslation } from '../../i18n/LanguageProvider';
 import { LocationPickerModal } from './LocationPickerModal';
 
 export type LocationFieldValue = {
@@ -27,6 +28,7 @@ type LocationFieldProps = {
 };
 
 export function LocationField({ value, onChange, disabled, onError }: LocationFieldProps) {
+  const { locale, t } = useTranslation();
   const listId = useId();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,7 +60,7 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
     const timer = window.setTimeout(async () => {
       setSearching(true);
       try {
-        const results = await searchAddresses(q);
+        const results = await searchAddresses(q, locale);
         if (!cancelled) setSuggestions(results);
       } catch {
         if (!cancelled) setSuggestions([]);
@@ -71,7 +73,7 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [query, listOpen]);
+  }, [query, listOpen, locale]);
 
   const applyLocation = useCallback(
     (lat: number, lng: number, label: string, source: LocationSource) => {
@@ -102,6 +104,13 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
     setListOpen(true);
   };
 
+  const handleInputFocus = () => {
+    if (query.trim().length >= 3) setListOpen(true);
+    window.setTimeout(() => {
+      wrapperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  };
+
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const next = e.relatedTarget as Node | null;
     if (next && wrapperRef.current?.contains(next)) return;
@@ -116,10 +125,10 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
     setListOpen(false);
     setLocating(true);
     try {
-      const { lat, lng, label } = await detectLocation();
+      const { lat, lng, label } = await detectLocation(locale);
       applyLocation(lat, lng, label, 'gps');
     } catch (err) {
-      onError?.(geolocationErrorMessage(err));
+      onError?.(geolocationErrorMessage(err, t));
     } finally {
       setLocating(false);
     }
@@ -130,19 +139,19 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
     inputRef.current?.blur();
     const text = query.trim();
     if (text.length < 3) {
-      onError?.('Type at least a few characters to verify the address.');
+      onError?.(t('location.toastVerifyMin'));
       return;
     }
     setVerifying(true);
     try {
-      const result = await geocodeAddress(text);
+      const result = await geocodeAddress(text, locale);
       if (!result) {
-        onError?.('Could not find that place. Try search suggestions or pick on the map.');
+        onError?.(t('location.toastVerifyNotFound'));
         return;
       }
       applyLocation(result.lat, result.lng, result.label, 'verified');
     } catch {
-      onError?.('Address lookup failed. Try again or pick on the map.');
+      onError?.(t('location.toastVerifyFailed'));
     } finally {
       setVerifying(false);
     }
@@ -161,25 +170,71 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
 
   const statusLabel = (() => {
     if (value.synced && value.lat != null) {
-      if (value.source === 'map') return 'Pinned on map';
-      if (value.source === 'gps') return 'From your device location';
-      if (value.source === 'search') return 'From address search';
-      if (value.source === 'verified') return 'Address verified';
-      return 'Location set';
+      if (value.source === 'map') return t('location.statusPinned');
+      if (value.source === 'gps') return t('location.statusGps');
+      if (value.source === 'search') return t('location.statusSearch');
+      if (value.source === 'verified') return t('location.statusVerified');
+      return t('location.statusSet');
     }
     if (value.lat != null && !value.synced) {
-      return 'Address edited — verify or pick on map to update pin';
+      return t('location.statusEdited');
     }
     return null;
   })();
 
   const showList = listOpen && query.trim().length >= 3 && (searching || suggestions.length > 0);
 
+  const actionButtons = (
+    <div className="location-field-actions grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:gap-2">
+      <button
+        type="button"
+        onClick={handleDetectLocation}
+        disabled={disabled || locating}
+        className="btn-secondary btn-ripple location-action-btn gap-2 text-sm"
+      >
+        {locating ? (
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+        ) : (
+          <MapPin className="h-4 w-4" aria-hidden />
+        )}
+        {locating ? t('location.detecting') : t('location.myLocation')}
+      </button>
+      <button
+        type="button"
+        onClick={handleOpenMap}
+        disabled={disabled}
+        className="btn-secondary btn-ripple location-action-btn gap-2 text-sm"
+      >
+        <Map className="h-4 w-4" aria-hidden />
+        {t('location.pickOnMap')}
+      </button>
+      <button
+        type="button"
+        onClick={handleVerifyAddress}
+        disabled={disabled || verifying}
+        className="btn-secondary btn-ripple location-action-btn gap-2 text-sm"
+      >
+        {verifying ? (
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+        ) : (
+          <CheckCircle2 className="h-4 w-4" aria-hidden />
+        )}
+        {verifying ? t('location.checking') : t('location.verifyAddress')}
+      </button>
+    </div>
+  );
+
   return (
     <div className="form-field location-field" ref={wrapperRef}>
       <label htmlFor="location" className="form-label">
-        Location <span className="text-accent">*</span>
+        {t('location.label')} <span className="text-accent">*</span>
       </label>
+
+      {actionButtons}
+
+      <p className="location-verify-hint font-body text-xs leading-relaxed text-dim">
+        {t('location.verifyHint')}
+      </p>
 
       <div className="relative">
         <Search
@@ -193,9 +248,9 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
           type="text"
           value={query}
           onChange={(e) => handleInputChange(e.target.value)}
-          onFocus={() => query.trim().length >= 3 && setListOpen(true)}
+          onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          placeholder="Search or type village, district…"
+          placeholder={t('location.placeholder')}
           className="form-input !pl-10"
           autoComplete="off"
           disabled={disabled}
@@ -215,7 +270,7 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
       {showList && (
         <ul id={listId} className="address-suggestions-inline" role="listbox">
           {searching && suggestions.length === 0 && (
-            <li className="px-4 py-3 font-body text-sm text-dim">Searching…</li>
+            <li className="px-4 py-3 font-body text-sm text-dim">{t('location.searching')}</li>
           )}
           {suggestions.map((item) => (
             <li key={item.placeId}>
@@ -235,47 +290,9 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
         </ul>
       )}
 
-      <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={handleDetectLocation}
-          disabled={disabled || locating}
-          className="btn-secondary btn-ripple gap-2 text-sm"
-        >
-          {locating ? (
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-          ) : (
-            <MapPin className="h-4 w-4" aria-hidden />
-          )}
-          {locating ? 'Detecting…' : 'My location'}
-        </button>
-        <button
-          type="button"
-          onClick={handleOpenMap}
-          disabled={disabled}
-          className="btn-secondary btn-ripple gap-2 text-sm"
-        >
-          <Map className="h-4 w-4" aria-hidden />
-          Pick on map
-        </button>
-        <button
-          type="button"
-          onClick={handleVerifyAddress}
-          disabled={disabled || verifying}
-          className="btn-secondary btn-ripple gap-2 text-sm"
-        >
-          {verifying ? (
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-          ) : (
-            <CheckCircle2 className="h-4 w-4" aria-hidden />
-          )}
-          {verifying ? 'Checking…' : 'Verify address'}
-        </button>
-      </div>
-
       {statusLabel && (
         <p
-          className={`mt-2 flex items-start gap-1.5 font-body text-xs ${
+          className={`flex items-start gap-1.5 font-body text-xs ${
             value.synced ? 'text-accent' : 'text-dim'
           }`}
         >
@@ -285,7 +302,7 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
       )}
 
       {value.lat != null && value.lng != null && (
-        <p className="mt-1 font-body text-xs text-dim">
+        <p className="font-body text-xs text-dim">
           {value.lat.toFixed(5)}, {value.lng.toFixed(5)}
         </p>
       )}

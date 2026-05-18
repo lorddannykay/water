@@ -1,11 +1,13 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
 import { Camera, Loader2, Mail, Plus } from 'lucide-react';
+import { useTranslation } from '../../i18n/LanguageProvider';
 import { Section, SectionInner } from '../Section';
 import { FormToast } from '../ui/FormToast';
 import { LocationField, type LocationFieldValue } from '../contribute/LocationField';
 import { scrollToSection } from '../../lib/utils';
 import { compressImage, formatSizeKb } from '../../lib/imageUtils';
+import { isValidPhotoUrl, normalizePhotoUrl } from '../../lib/photoUrl';
 import { isSupabaseConfigured, SITE_PHOTOS_BUCKET, supabase } from '../../lib/supabase';
 import { formatSiteTypeLabel, SITE_TYPES } from '../../lib/siteTypes';
 
@@ -18,6 +20,7 @@ const EMPTY_LOCATION: LocationFieldValue = {
 };
 
 export function Contribute() {
+  const { locale, t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -27,6 +30,7 @@ export function Contribute() {
   const [photoBlob, setPhotoBlob] = useState<Blob | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoSizeLabel, setPhotoSizeLabel] = useState<string | null>(null);
+  const [photoLink, setPhotoLink] = useState('');
   const prefersReducedMotion = useReducedMotion();
 
   const showToast = useCallback((message: string, ms = 5000) => {
@@ -34,23 +38,33 @@ export function Contribute() {
     setTimeout(() => setToast(null), ms);
   }, []);
 
+  const clearUploadedPhoto = () => {
+    setPhotoBlob(null);
+    setPhotoSizeLabel(null);
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhotoPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setPhotoLink('');
     setCompressing(true);
     try {
       const result = await compressImage(file);
       setPhotoBlob(result.blob);
+      setPhotoLink('');
       setPhotoSizeLabel(
         result.skippedCompression
-          ? `Ready to upload (${formatSizeKb(result.sizeKb)})`
-          : `Compressed to ${formatSizeKb(result.sizeKb)}`,
+          ? t('contribute.photoReady', { size: formatSizeKb(result.sizeKb) })
+          : t('contribute.photoCompressed', { size: formatSizeKb(result.sizeKb) }),
       );
       if (photoPreview) URL.revokeObjectURL(photoPreview);
       setPhotoPreview(URL.createObjectURL(result.blob));
     } catch (err) {
-      showToast(err instanceof Error ? err.message : 'Could not process photo.', 4000);
+      showToast(err instanceof Error ? err.message : t('contribute.toastPhotoError'), 4000);
       e.target.value = '';
     } finally {
       setCompressing(false);
@@ -60,11 +74,8 @@ export function Contribute() {
   const resetFormState = () => {
     formRef.current?.reset();
     setLocation(EMPTY_LOCATION);
-    setPhotoBlob(null);
-    setPhotoSizeLabel(null);
-    if (photoPreview) URL.revokeObjectURL(photoPreview);
-    setPhotoPreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    clearUploadedPhoto();
+    setPhotoLink('');
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -83,12 +94,18 @@ export function Contribute() {
     const contributorName = (data.get('contributorName') as string)?.trim() || null;
 
     if (!siteName || !locationText) {
-      showToast('Please add at least a site name and location.', 4000);
+      showToast(t('contribute.toastMissing'), 4000);
+      return;
+    }
+
+    const trimmedPhotoLink = photoLink.trim();
+    if (trimmedPhotoLink && !isValidPhotoUrl(trimmedPhotoLink)) {
+      showToast(t('contribute.toastInvalidPhotoUrl'), 4000);
       return;
     }
 
     if (!isSupabaseConfigured || !supabase) {
-      showToast('Submissions are not configured yet. Please try again later.', 5000);
+      showToast(t('contribute.toastNotConfigured'), 5000);
       return;
     }
 
@@ -110,6 +127,8 @@ export function Contribute() {
 
         const { data: urlData } = supabase.storage.from(SITE_PHOTOS_BUCKET).getPublicUrl(fileName);
         photoUrl = urlData.publicUrl;
+      } else if (trimmedPhotoLink) {
+        photoUrl = normalizePhotoUrl(trimmedPhotoLink);
       }
 
       const { error: insertError } = await supabase.from('water_sites').insert({
@@ -126,11 +145,14 @@ export function Contribute() {
       if (insertError) throw insertError;
 
       resetFormState();
-      showToast(`Thank you. "${siteName}" has been received. We will review it soon.`);
+      showToast(t('contribute.toastThanksModerated', { name: siteName }));
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : 'Something went wrong. Please try again.';
-      showToast(msg.includes('relation') ? 'Database not ready — run the setup SQL in Supabase.' : msg, 6000);
+        err instanceof Error ? err.message : t('contribute.toastError');
+      showToast(
+        msg.includes('relation') ? t('contribute.toastDbNotReady') : msg,
+        6000,
+      );
     } finally {
       setSubmitting(false);
     }
@@ -147,21 +169,20 @@ export function Contribute() {
             viewport={{ once: true }}
             transition={{ duration: 0.9 }}
           >
-            <span className="text-xs font-bold tracking-[0.4em] text-accent uppercase">Contribute</span>
+            <span className="text-xs font-bold tracking-[0.4em] text-accent uppercase">
+              {t('contribute.label')}
+            </span>
             <h2 className="mt-4 font-serif text-4xl leading-tight text-ink md:text-5xl">
-              You know a place this atlas is looking for.
+              {t('contribute.title')}
             </h2>
-            <p className="mt-6 font-body text-lg leading-relaxed text-dim">
-              You may not think of it as expertise, but local knowledge is what this project runs on.
-              The atlas is built from small, specific fragments like yours.
-            </p>
+            <p className="mt-6 font-body text-lg leading-relaxed text-dim">{t('contribute.intro')}</p>
             <button
               type="button"
               onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               className="btn-primary btn-ripple mt-8"
             >
               <Plus className="h-4 w-4" aria-hidden />
-              Add a Water Site
+              {t('contribute.addSite')}
             </button>
 
             <form
@@ -169,11 +190,11 @@ export function Contribute() {
               onSubmit={handleSubmit}
               className="glass mt-12 space-y-6 rounded-2xl p-8 md:p-10"
               noValidate
-              aria-label="Add a water heritage site"
+              aria-label={t('contribute.formAria')}
             >
               <motion.div className="form-field">
                 <label htmlFor="photograph" className="form-label">
-                  Photograph
+                  {t('contribute.photograph')}
                 </label>
                 <input
                   ref={fileInputRef}
@@ -184,12 +205,12 @@ export function Contribute() {
                   capture="environment"
                   className="sr-only"
                   onChange={handlePhotoChange}
-                  disabled={compressing || submitting}
+                  disabled={compressing || submitting || !!photoLink.trim()}
                 />
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={compressing || submitting}
+                  disabled={compressing || submitting || !!photoLink.trim()}
                   className="flex w-full items-center justify-center gap-3 rounded-xl border-2 border-dashed border-accent/30 bg-surface/50 px-4 py-8 transition-colors hover:border-accent/50 disabled:opacity-60"
                 >
                   {compressing ? (
@@ -198,7 +219,7 @@ export function Contribute() {
                     <Camera className="h-6 w-6 text-accent" aria-hidden />
                   )}
                   <span className="font-body text-sm text-dim">
-                    {compressing ? 'Preparing photo…' : 'Take or choose a photo'}
+                    {compressing ? t('contribute.preparingPhoto') : t('contribute.takePhoto')}
                   </span>
                 </button>
                 {photoPreview && (
@@ -209,7 +230,7 @@ export function Contribute() {
                   >
                     <img
                       src={photoPreview}
-                      alt="Preview of your photograph"
+                      alt={t('contribute.photoPreviewAlt')}
                       className="max-h-48 w-full object-cover"
                     />
                     {photoSizeLabel && (
@@ -217,6 +238,26 @@ export function Contribute() {
                     )}
                   </motion.div>
                 )}
+                <p className="mt-3 text-center font-body text-xs text-dim">{t('contribute.photoOr')}</p>
+                <label htmlFor="photoLink" className="sr-only">
+                  {t('contribute.photoLink')}
+                </label>
+                <input
+                  id="photoLink"
+                  name="photoLink"
+                  type="url"
+                  inputMode="url"
+                  autoComplete="off"
+                  placeholder={t('contribute.photoLinkPlaceholder')}
+                  className="form-input mt-2"
+                  value={photoLink}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setPhotoLink(next);
+                    if (next.trim()) clearUploadedPhoto();
+                  }}
+                  disabled={compressing || submitting || !!photoBlob}
+                />
               </motion.div>
 
               <LocationField
@@ -228,14 +269,14 @@ export function Contribute() {
 
               <motion.div className="form-field">
                 <label htmlFor="siteName" className="form-label">
-                  Site name <span className="text-accent">*</span>
+                  {t('contribute.siteName')} <span className="text-accent">*</span>
                 </label>
                 <input
                   id="siteName"
                   name="siteName"
                   type="text"
                   required
-                  placeholder="What is this place called?"
+                  placeholder={t('contribute.siteNamePlaceholder')}
                   className="form-input"
                   disabled={submitting}
                 />
@@ -243,7 +284,7 @@ export function Contribute() {
 
               <motion.div className="form-field">
                 <label htmlFor="siteType" className="form-label">
-                  Type
+                  {t('contribute.type')}
                 </label>
                 <select
                   id="siteType"
@@ -252,9 +293,9 @@ export function Contribute() {
                   defaultValue="Tank"
                   disabled={submitting}
                 >
-                  {SITE_TYPES.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {formatSiteTypeLabel(t)}
+                  {SITE_TYPES.map((st) => (
+                    <option key={st.value} value={st.value}>
+                      {formatSiteTypeLabel(st, locale)}
                     </option>
                   ))}
                 </select>
@@ -262,12 +303,12 @@ export function Contribute() {
 
               <motion.div className="form-field">
                 <label htmlFor="story" className="form-label">
-                  Story / memory
+                  {t('contribute.story')}
                 </label>
                 <textarea
                   id="story"
                   name="story"
-                  placeholder="One sentence or a lifetime of memory, whatever you have."
+                  placeholder={t('contribute.storyPlaceholder')}
                   className="form-textarea"
                   disabled={submitting}
                 />
@@ -275,13 +316,14 @@ export function Contribute() {
 
               <motion.div className="form-field">
                 <label htmlFor="contributorName" className="form-label">
-                  Your name <span className="text-dim">(optional)</span>
+                  {t('contribute.yourName')}{' '}
+                  <span className="text-dim">{t('contribute.yourNameOptional')}</span>
                 </label>
                 <input
                   id="contributorName"
                   name="contributorName"
                   type="text"
-                  placeholder="How should we credit you?"
+                  placeholder={t('contribute.yourNamePlaceholder')}
                   className="form-input"
                   autoComplete="name"
                   disabled={submitting}
@@ -296,26 +338,23 @@ export function Contribute() {
                 {submitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                    Sending…
+                    {t('contribute.sending')}
                   </>
                 ) : (
-                  'Add a Water Site'
+                  t('contribute.submit')
                 )}
               </button>
             </form>
 
             <div className="mt-12 text-center">
-              <p className="font-body text-dim">
-                You can also write to us. Point us toward a community whose water knowledge we should
-                know about. Share a story that doesn&apos;t fit neatly into a pin on a map.
-              </p>
+              <p className="font-body text-dim">{t('contribute.footerP')}</p>
               <button
                 type="button"
                 onClick={() => scrollToSection('contact')}
                 className="btn-secondary btn-ripple mt-6"
               >
                 <Mail className="h-4 w-4" aria-hidden />
-                Get in Touch
+                {t('contribute.getInTouch')}
               </button>
             </div>
           </motion.div>

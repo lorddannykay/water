@@ -7,10 +7,12 @@ import {
 } from 'motion/react';
 import { useRef } from 'react';
 import { MapPin, Plus } from 'lucide-react';
+import { useTranslation } from '../../i18n/LanguageProvider';
 import { Section, SectionInner } from '../Section';
 import { scrollToSection } from '../../lib/utils';
 
 export function Hero() {
+  const { t } = useTranslation();
   const scrollTargetRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -57,7 +59,7 @@ export function Hero() {
             <motion.div style={{ y: titleY }} className="relative">
               <span className="mb-6 flex items-center gap-3 text-[11px] font-bold tracking-[0.4em] text-accent uppercase">
                 <span className="h-px w-10 bg-accent" />
-                The Water Heritage Project
+                {t('hero.eyebrow')}
               </span>
 
               <h1 className="perspective-text max-w-[18ch] font-serif text-5xl leading-[0.9] font-light tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl">
@@ -67,7 +69,7 @@ export function Hero() {
                   transition={{ duration: 1, delay: 0.1 }}
                   className="block text-ink"
                 >
-                  Water
+                  {t('hero.titleWater')}
                 </motion.span>
                 <motion.span
                   initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
@@ -75,24 +77,17 @@ export function Hero() {
                   transition={{ duration: 1, delay: 0.25 }}
                   className="block text-accent italic"
                 >
-                  remembers.
+                  {t('hero.titleRemembers')}
                 </motion.span>
               </h1>
 
               <p className="mt-2 font-sans text-sm tracking-[0.25em] text-dim uppercase">
-                Mapping Water Heritage
+                {t('hero.tagline')}
               </p>
 
               <div className="mt-10 max-w-2xl space-y-6 font-body text-lg leading-relaxed text-dim md:text-xl">
-                <p>
-                  It holds the fields it once fed, the temples along its bend, the hands that met at
-                  dawn on its banks. Whole communities shaped their days around it, gave it names,
-                  kept rituals at its edge.
-                </p>
-                <p>
-                  This atlas tries to draw that memory onto a map. If you carry a piece of it, we
-                  would like you to add it here.
-                </p>
+                <p>{t('hero.p1')}</p>
+                <p>{t('hero.p2')}</p>
               </div>
 
               <div className="mt-12 flex flex-wrap gap-4">
@@ -102,7 +97,7 @@ export function Hero() {
                   className="btn-primary btn-ripple"
                 >
                   <MapPin className="h-4 w-4" aria-hidden />
-                  Explore the Map
+                  {t('hero.exploreMap')}
                 </button>
                 <button
                   type="button"
@@ -110,35 +105,35 @@ export function Hero() {
                   className="btn-secondary btn-ripple"
                 >
                   <Plus className="h-4 w-4" aria-hidden />
-                  Add Your Site
+                  {t('hero.addSite')}
                 </button>
               </div>
             </motion.div>
           </motion.div>
         </SectionInner>
-        {/* Animated wave separator */}
+
         <div className="hero-waves" aria-hidden>
-        <svg
-          viewBox="0 0 1440 90"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            className="wave-path wave-path--1"
-            d="M0 45 C180 10 360 80 540 45 C720 10 900 80 1080 45 C1260 10 1440 80 1620 45 C1800 10 1980 80 2160 45 C2340 10 2520 80 2700 45 C2880 10 2880 80 2880 45 L2880 90 L0 90 Z"
-            fill="rgba(127,182,154,0.07)"
-          />
-          <path
-            className="wave-path wave-path--2"
-            d="M0 55 C160 25 320 75 480 55 C640 25 800 75 960 55 C1120 25 1280 75 1440 55 C1600 25 1760 75 1920 55 C2080 25 2240 75 2400 55 C2560 25 2720 75 2880 55 L2880 90 L0 90 Z"
-            fill="rgba(139,184,212,0.07)"
-          />
-          <path
-            className="wave-path wave-path--3"
-            d="M0 60 C200 35 400 78 600 60 C800 35 1000 78 1200 60 C1400 35 1600 78 1800 60 C2000 35 2200 78 2400 60 C2600 35 2800 78 2880 60 L2880 90 L0 90 Z"
-            fill="rgba(127,182,154,0.05)"
-          />
-        </svg>
+          <svg
+            viewBox="0 0 1440 90"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              className="wave-path wave-path--1"
+              d="M0 45 C180 10 360 80 540 45 C720 10 900 80 1080 45 C1260 10 1440 80 1620 45 C1800 10 1980 80 2160 45 C2340 10 2520 80 2700 45 C2880 10 2880 80 2880 45 L2880 90 L0 90 Z"
+              fill="rgba(127,182,154,0.07)"
+            />
+            <path
+              className="wave-path wave-path--2"
+              d="M0 55 C160 25 320 75 480 55 C640 25 800 75 960 55 C1120 25 1280 75 1440 55 C1600 25 1760 75 1920 55 C2080 25 2240 75 2400 55 C2560 25 2720 75 2880 55 L2880 90 L0 90 Z"
+              fill="rgba(139,184,212,0.07)"
+            />
+            <path
+              className="wave-path wave-path--3"
+              d="M0 60 C200 35 400 78 600 60 C800 35 1000 78 1200 60 C1400 35 1600 78 1800 60 C2000 35 2200 78 2400 60 C2600 35 2800 78 2880 60 L2880 90 L0 90 Z"
+              fill="rgba(127,182,154,0.05)"
+            />
+          </svg>
         </div>
       </div>
 
@@ -151,18 +146,16 @@ export function Hero() {
         >
           <div className="glass p-8 md:p-10 lg:p-12">
             <h2 className="text-xs font-bold tracking-[0.35em] text-accent uppercase">
-              Mapping Water
+              {t('hero.mappingTitle')}
             </h2>
             <p className="mt-6 font-serif text-2xl leading-snug text-ink md:text-3xl">
-              Heritage does not always announce itself.
+              {t('hero.mappingHeadline')}
             </p>
             <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
-              Some sites are famous. Most are ordinary: a mud bund holding back a field, a kulam so
-              familiar its village stopped photographing it, a spring named only in elders&apos;
-              stories, a hand-cut channel still carrying water through the dry months.
+              {t('hero.mappingP1')}
             </p>
             <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
-              None of these are lesser. They are what kept people fed, and many still do.
+              {t('hero.mappingP2')}
             </p>
           </div>
         </motion.div>

@@ -1,10 +1,12 @@
+import type { Locale } from '../i18n/types';
+
 export type SiteTypeOption = {
   value: string;
   labelEn: string;
   labelTa: string;
 };
 
-/** Stored in DB as English `value`; shown bilingually in the UI. */
+/** Stored in DB as English `value`; shown in UI by locale. */
 export const SITE_TYPES: SiteTypeOption[] = [
   { value: 'River', labelEn: 'River', labelTa: 'ஆறு' },
   { value: 'Tank', labelEn: 'Tank', labelTa: 'குளம்' },
@@ -14,6 +16,6 @@ export const SITE_TYPES: SiteTypeOption[] = [
   { value: 'Other', labelEn: 'Other', labelTa: 'மற்றவை' },
 ];
 
-export function formatSiteTypeLabel(option: SiteTypeOption): string {
-  return `${option.labelTa} · ${option.labelEn}`;
+export function formatSiteTypeLabel(option: SiteTypeOption, locale: Locale = 'en'): string {
+  return locale === 'ta' ? option.labelTa : option.labelEn;
 }

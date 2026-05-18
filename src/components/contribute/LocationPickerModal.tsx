@@ -7,6 +7,7 @@ import {
   searchAddresses,
   type AddressSuggestion,
 } from '../../lib/geo';
+import { useTranslation } from '../../i18n/LanguageProvider';
 import { defaultPickerCenter, LocationPickerMap } from './LocationPickerMap';
 
 type LocationPickerModalProps = {
@@ -26,6 +27,7 @@ export function LocationPickerModal({
   onConfirm,
   onClose,
 }: LocationPickerModalProps) {
+  const { locale, t } = useTranslation();
   const start = defaultPickerCenter(initialLat, initialLng);
   const [pinLat, setPinLat] = useState(start.lat);
   const [pinLng, setPinLng] = useState(start.lng);
@@ -57,18 +59,21 @@ export function LocationPickerModal({
     };
   }, [open]);
 
-  const resolveAddress = useCallback(async (lat: number, lng: number) => {
-    setResolving(true);
-    setError(null);
-    try {
-      const label = await reverseGeocode(lat, lng);
-      setAddressLabel(label);
-    } catch {
-      setAddressLabel(`${lat.toFixed(5)}, ${lng.toFixed(5)}`);
-    } finally {
-      setResolving(false);
-    }
-  }, []);
+  const resolveAddress = useCallback(
+    async (lat: number, lng: number) => {
+      setResolving(true);
+      setError(null);
+      try {
+        const label = await reverseGeocode(lat, lng, locale);
+        setAddressLabel(label);
+      } catch {
+        setAddressLabel(`${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+      } finally {
+        setResolving(false);
+      }
+    },
+    [locale],
+  );
 
   const handlePick = useCallback(
     (lat: number, lng: number) => {
@@ -90,7 +95,7 @@ export function LocationPickerModal({
     const timer = setTimeout(async () => {
       setSearching(true);
       try {
-        const results = await searchAddresses(q);
+        const results = await searchAddresses(q, locale);
         setSuggestions(results);
       } catch {
         setSuggestions([]);
@@ -100,7 +105,7 @@ export function LocationPickerModal({
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, open]);
+  }, [searchQuery, open, locale]);
 
   const jumpMapTo = (lat: number, lng: number, label?: string) => {
     setPinLat(lat);
@@ -119,10 +124,10 @@ export function LocationPickerModal({
     setLocating(true);
     setError(null);
     try {
-      const { lat, lng, label } = await detectLocation();
+      const { lat, lng, label } = await detectLocation(locale);
       jumpMapTo(lat, lng, label);
     } catch (err) {
-      setError(geolocationErrorMessage(err));
+      setError(geolocationErrorMessage(err, t));
     } finally {
       setLocating(false);
     }
@@ -158,13 +163,13 @@ export function LocationPickerModal({
       >
         <header className="location-picker-header">
           <h3 id="location-picker-title" className="font-serif text-lg text-ink">
-            Pick location on map
+            {t('location.pickerTitle')}
           </h3>
           <button
             type="button"
             onClick={onClose}
             className="location-picker-icon-btn"
-            aria-label="Close map picker"
+            aria-label={t('location.pickerClose')}
           >
             <X className="h-5 w-5" aria-hidden />
           </button>
@@ -176,7 +181,7 @@ export function LocationPickerModal({
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search village, town, or landmark…"
+            placeholder={t('location.pickerSearchPlaceholder')}
             className="min-w-0 flex-1 bg-transparent font-body text-sm text-ink outline-none placeholder:text-dim"
             autoComplete="off"
           />
@@ -224,27 +229,27 @@ export function LocationPickerModal({
             ) : (
               <MapPin className="h-5 w-5" aria-hidden />
             )}
-            <span className="sr-only">Use my current location</span>
+            <span className="sr-only">{t('location.pickerMyLocation')}</span>
           </button>
         </div>
 
         <p className="location-picker-hint font-body text-xs text-dim">
-          Drag the pin, tap the map, or search — useful if the photo was taken somewhere else.
+          {t('location.pickerHint')}
         </p>
 
         <footer className="location-picker-footer">
           <div className="min-w-0 flex-1">
             <p className="font-body text-xs font-semibold uppercase tracking-wide text-dim">
-              Selected address
+              {t('location.pickerSelected')}
             </p>
             <p className="mt-1 font-body text-sm leading-snug text-ink">
               {resolving ? (
                 <span className="inline-flex items-center gap-2 text-dim">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-                  Updating address…
+                  {t('location.pickerUpdating')}
                 </span>
               ) : (
-                addressLabel || 'Move the pin to set a place'
+                addressLabel || t('location.pickerMovePin')
               )}
             </p>
             <p className="mt-1 font-body text-xs text-dim">
@@ -253,7 +258,7 @@ export function LocationPickerModal({
             {error && <p className="mt-2 font-body text-xs text-accent">{error}</p>}
           </div>
           <button type="button" onClick={handleConfirm} className="btn-primary btn-ripple shrink-0">
-            Confirm
+            {t('location.pickerConfirm')}
           </button>
         </footer>
       </div>

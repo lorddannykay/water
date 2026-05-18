@@ -1,16 +1,17 @@
 import { motion } from 'motion/react';
+import { useTranslation } from '../i18n/LanguageProvider';
 import { scrollToSection } from '../lib/utils';
 
-export const NAV_ITEMS = [
-  { label: 'Home', id: 'home' },
-  { label: 'About', id: 'about' },
-  { label: 'Atlas', id: 'atlas' },
-  { label: 'Collective', id: 'collective' },
-  { label: 'Contribute', id: 'contribute' },
-  { label: 'Contact', id: 'contact' },
-] as const;
+const NAV_IDS = ['home', 'about', 'atlas', 'collective', 'contribute', 'contact'] as const;
 
 export function Navbar() {
+  const { t } = useTranslation();
+
+  const navItems = NAV_IDS.map((id) => ({
+    id,
+    label: t(`nav.${id}`),
+  }));
+
   return (
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
@@ -25,18 +26,18 @@ export function Navbar() {
           type="button"
           onClick={() => scrollToSection('home')}
           className="group flex w-full shrink-0 flex-col items-start gap-0.5 text-left sm:w-auto"
-          aria-label="The Water Heritage Project, go to home"
+          aria-label={`${t('brand.title')}, ${t('nav.home')}`}
         >
           <span className="whitespace-nowrap font-tamil text-sm leading-tight text-ink transition-colors group-hover:text-accent sm:text-base">
-            The Water Heritage Project
+            {t('brand.title')}
           </span>
           <span className="whitespace-nowrap font-sans text-[10px] font-semibold tracking-[0.14em] text-dim uppercase sm:text-xs sm:tracking-[0.2em]">
-            Mapping Water Heritage
+            {t('brand.tagline')}
           </span>
         </button>
 
         <div className="navbar-links -mx-4 flex w-[calc(100%+2rem)] items-center gap-3 overflow-x-auto px-4 pb-0.5 sm:mx-0 sm:w-auto sm:gap-6 sm:px-0 sm:pb-0 lg:gap-8">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
