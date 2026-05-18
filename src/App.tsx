@@ -5,6 +5,7 @@
 
 import { motion, useScroll } from 'motion/react';
 import { useEffect } from 'react';
+import { LocationDraftProvider } from './context/LocationDraftContext';
 import { LanguageProvider } from './i18n/LanguageProvider';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -28,6 +29,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
+      <LocationDraftProvider>
       <div className="relative min-h-screen overflow-x-hidden bg-bg font-sans text-ink selection:bg-accent/30 selection:text-ink">
         <PageAmbience />
         <Navbar />
@@ -48,6 +50,7 @@ export default function App() {
         </main>
         <Footer />
       </div>
+      </LocationDraftProvider>
     </LanguageProvider>
   );
 }

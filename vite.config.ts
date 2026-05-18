@@ -31,7 +31,7 @@ export default defineConfig(({mode}) => {
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify — file watching is disabled to prevent flickering during agent edits.
+      // Do not modify: file watching is disabled to prevent flickering during agent edits.
       // TUNNEL=1 disables HMR so HTTPS tunnels (loca.lt / trycloudflare) do not hang on bad WS.
       hmr:
         process.env.DISABLE_HMR === 'true' || tunnelMode ? false : true,

@@ -258,7 +258,7 @@ html.lang-ta .font-sans {
   resize: vertical;
 }
 
-/* Page ambience — soft pastel washes */
+/* Page ambience: soft pastel washes */
 .page-ambience {
   position: fixed;
   inset: 0;
@@ -548,6 +548,20 @@ html.lang-ta .font-sans {
   box-shadow: 0 2px 8px rgba(13, 20, 16, 0.25);
 }
 
+.water-map-marker--draft {
+  width: 32px;
+  height: 32px;
+  background: #2d8a5e;
+  border-color: #0d1410;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.6),
+    0 4px 14px rgba(45, 138, 94, 0.45);
+}
+
+.leaflet-container {
+  touch-action: manipulation;
+}
+
 /* Toast */
 .form-toast {
   position: fixed;
@@ -579,7 +593,7 @@ html.lang-ta .font-sans {
   perspective: 1000px;
 }
 
-/* Address suggestions — in document flow between input and buttons (no overlay) */
+/* Address suggestions: in document flow between input and buttons (no overlay) */
 .location-field {
   position: relative;
   isolation: isolate;

@@ -8,7 +8,7 @@ import {
   type AddressSuggestion,
 } from '../../lib/geo';
 import { useTranslation } from '../../i18n/LanguageProvider';
-import { defaultPickerCenter, LocationPickerMap } from './LocationPickerMap';
+import { defaultPickerCenter, defaultPickerZoom, LocationPickerMap } from './LocationPickerMap';
 
 type LocationPickerModalProps = {
   open: boolean;
@@ -29,6 +29,7 @@ export function LocationPickerModal({
 }: LocationPickerModalProps) {
   const { locale, t } = useTranslation();
   const start = defaultPickerCenter(initialLat, initialLng);
+  const baseZoom = defaultPickerZoom(initialLat, initialLng);
   const [pinLat, setPinLat] = useState(start.lat);
   const [pinLng, setPinLng] = useState(start.lng);
   const [addressLabel, setAddressLabel] = useState(initialLabel);
@@ -217,6 +218,7 @@ export function LocationPickerModal({
             lng={pinLng}
             onPick={handlePick}
             recenterZoom={recenterZoom}
+            mapZoom={baseZoom}
           />
           <button
             type="button"

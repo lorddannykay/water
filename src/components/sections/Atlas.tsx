@@ -1,15 +1,16 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Plus } from 'lucide-react';
 import { useTranslation } from '../../i18n/LanguageProvider';
+import { useLocationDraft } from '../../context/LocationDraftContext';
 import { Section, SectionInner } from '../Section';
 import { useApprovedWaterSites } from '../../hooks/useApprovedWaterSites';
 import { WaterMap } from '../map/WaterMap';
-import { scrollToSection } from '../../lib/utils';
 
 export function Atlas() {
   const { t } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
   const { sites: approvedSites } = useApprovedWaterSites();
+  const { setDraftFromMap, draftPin, resolving } = useLocationDraft();
 
   return (
     <Section id="atlas" className="!min-h-0 py-32">
@@ -30,11 +31,13 @@ export function Atlas() {
         >
           <WaterMap
             extraSites={approvedSites}
-            onMapClick={() => scrollToSection('contribute')}
+            draftPin={draftPin}
+            resolving={resolving}
+            onMapClick={(lat, lng) => void setDraftFromMap(lat, lng)}
           />
         </motion.div>
 
-        <div className="mt-16 border-t border-border pt-12 md:mt-20 md:pt-16">
+        <motion.div className="mt-16 border-t border-border pt-12 md:mt-20 md:pt-16">
           <h3 className="font-serif text-2xl text-ink md:text-3xl">{t('atlas.ctaTitle')}</h3>
           <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
             {t('atlas.ctaP1')}
@@ -45,15 +48,11 @@ export function Atlas() {
           <p className="mt-4 max-w-3xl font-body text-base leading-relaxed text-dim md:text-lg">
             {t('atlas.ctaP3')}
           </p>
-          <button
-            type="button"
-            onClick={() => scrollToSection('contribute')}
-            className="btn-primary btn-ripple mt-8"
-          >
+          <a href="#contribute" className="btn-primary btn-ripple mt-8 inline-flex">
             <Plus className="h-4 w-4" aria-hidden />
             {t('atlas.addSite')}
-          </button>
-        </div>
+          </a>
+        </motion.div>
       </SectionInner>
     </Section>
   );

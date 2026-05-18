@@ -78,6 +78,8 @@ export type Messages = {
     mapLoading: string;
     mapClickHint: string;
     mapPorunaiNote: string;
+    mapLegendNote: string;
+    resolvingLocation: string;
   };
   collective: {
     label: string;
@@ -122,6 +124,7 @@ export type Messages = {
     photoLinkPlaceholder: string;
     toastInvalidPhotoUrl: string;
     toastThanksModerated: string;
+    toastLocationFromMap: string;
   };
   contact: {
     label: string;

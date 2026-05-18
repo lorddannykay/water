@@ -1,6 +1,6 @@
 import type { WaterSite } from './siteData';
 
-/** SW and NE corners — Perungulam, Sivagalai, and the Thamirabarani east-channel kulam chain */
+/** SW and NE corners: Perungulam, Sivagalai, and the Thamirabarani east-channel kulam chain */
 export const PORUNAI_REGION_BOUNDS: [[number, number], [number, number]] = [
   [8.618, 77.948],
   [8.662, 78.018],
@@ -21,7 +21,7 @@ export const PORUNAI_SITES: WaterSite[] = [
     type: 'Village',
     featured: true,
     story:
-      'A panchayat town on the Thamirabarani, at the downstream end of the east-channel kulam chain — the focus of Saranya’s kulam research.',
+      'A panchayat town on the Thamirabarani, at the downstream end of the east-channel kulam chain, the focus of Saranya’s kulam research.',
   },
   {
     id: 'sivagalai-village',
@@ -38,7 +38,7 @@ export const PORUNAI_SITES: WaterSite[] = [
     coords: [8.6374, 77.9862],
     type: 'Tank',
     story:
-      'The last of sixteen tanks on the Thamirabarani east channel — about 900 acres, fed year-round and shared by Perungulam and Sivagalai.',
+      'The last of sixteen tanks on the Thamirabarani east channel, about 900 acres, fed year-round and shared by Perungulam and Sivagalai.',
   },
   {
     id: 'sivagalai-kulam',
@@ -52,7 +52,7 @@ export const PORUNAI_SITES: WaterSite[] = [
     name: 'Thamirabarani River',
     coords: [8.6468, 78.0025],
     type: 'River',
-    story: 'The Porunai / Thamirabarani at Perungulam — the river that feeds the east-channel tanks and kulams.',
+    story: 'The Porunai / Thamirabarani at Perungulam, the river that feeds the east-channel tanks and kulams.',
   },
   {
     id: 'thamirabarani-east-channel',

@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useId,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle2, Loader2, Map, MapPin, Search } from 'lucide-react';
 import {
@@ -27,7 +35,13 @@ type LocationFieldProps = {
   onError?: (message: string) => void;
 };
 
-export function LocationField({ value, onChange, disabled, onError }: LocationFieldProps) {
+export type LocationFieldHandle = {
+  focus: () => void;
+  scrollIntoView: () => void;
+};
+
+export const LocationField = forwardRef<LocationFieldHandle, LocationFieldProps>(
+  function LocationField({ value, onChange, disabled, onError }, ref) {
   const { locale, t } = useTranslation();
   const listId = useId();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -39,6 +53,13 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
   const [verifying, setVerifying] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const [listOpen, setListOpen] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    scrollIntoView: () => {
+      wrapperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    },
+  }));
 
   useEffect(() => {
     setQuery(value.text);
@@ -324,4 +345,5 @@ export function LocationField({ value, onChange, disabled, onError }: LocationFi
         )}
     </div>
   );
-}
+},
+);

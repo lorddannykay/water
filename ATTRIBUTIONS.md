@@ -4,16 +4,11 @@ This project uses open map data and libraries. **End users must see OpenStreetMa
 
 ## OpenStreetMap
 
-- **Basemap tiles:** [CARTO Voyager](https://carto.com/attributions) (OpenStreetMap data)
-- **Waterbody overlay:** `public/data/tamil-nadu-waterbodies.geojson` — derived from OpenStreetMap via [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API); regenerate with `npm run fetch:waterbodies`
+- **Tiles:** `https://tile.openstreetmap.org/` (Atlas map, location picker)
+- **Waterbody overlay:** `public/data/tamil-nadu-waterbodies.geojson`, derived from OpenStreetMap via [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API); regenerate with `npm run fetch:waterbodies`
 - **Geocoding:** [Nominatim](https://nominatim.openstreetmap.org/) (search and reverse geocoding in the contribute flow)
 - **License:** [Open Database License (ODbL)](https://opendatelog.org/)
 - **Copyright:** © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)
-
-## CARTO
-
-- **Tiles:** `https://basemaps.cartocdn.com/` (Voyager style)
-- **Attribution:** © CARTO © OpenStreetMap contributors
 
 ## Leaflet
 
@@ -22,7 +17,7 @@ This project uses open map data and libraries. **End users must see OpenStreetMa
 
 ## Tamil Nadu outline map
 
-- `public/assets/Tamil_Nadu_outline_map.svg` — see file metadata / source in the repository.
+- `public/assets/Tamil_Nadu_outline_map.svg`, see file metadata / source in the repository.
 
 ## Seed map imagery
 

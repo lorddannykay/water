@@ -9,9 +9,11 @@ export type WaterSite = {
   photoUrl?: string;
   /** Village anchors in the founder research area (larger map pin) */
   featured?: boolean;
+  /** Small blue reference pin for major rivers and lakes */
+  guide?: boolean;
 };
 
-/** Atlas seed pins — Porunai basin focus plus a few statewide examples */
+/** Atlas seed pins: Porunai basin focus plus a few statewide examples */
 export const SEED_SITES: WaterSite[] = [
   ...PORUNAI_SITES,
   {

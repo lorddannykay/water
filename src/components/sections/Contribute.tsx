@@ -1,10 +1,15 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Camera, Loader2, Mail, Plus } from 'lucide-react';
 import { useTranslation } from '../../i18n/LanguageProvider';
 import { Section, SectionInner } from '../Section';
 import { FormToast } from '../ui/FormToast';
-import { LocationField, type LocationFieldValue } from '../contribute/LocationField';
+import {
+  LocationField,
+  type LocationFieldHandle,
+  type LocationFieldValue,
+} from '../contribute/LocationField';
+import { useLocationDraft } from '../../context/LocationDraftContext';
 import { scrollToSection } from '../../lib/utils';
 import { compressImage, formatSizeKb } from '../../lib/imageUtils';
 import { isValidPhotoUrl, normalizePhotoUrl } from '../../lib/photoUrl';
@@ -23,6 +28,8 @@ export function Contribute() {
   const { locale, t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const locationFieldRef = useRef<LocationFieldHandle>(null);
+  const { draft, clearDraft } = useLocationDraft();
   const [toast, setToast] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [compressing, setCompressing] = useState(false);
@@ -37,6 +44,18 @@ export function Contribute() {
     setToast(message);
     setTimeout(() => setToast(null), ms);
   }, []);
+
+  useEffect(() => {
+    if (!draft) return;
+    setLocation(draft);
+    showToast(t('contribute.toastLocationFromMap'));
+    clearDraft();
+    requestAnimationFrame(() => {
+      locationFieldRef.current?.scrollIntoView();
+      locationFieldRef.current?.focus();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- apply once per draft
+  }, [draft]);
 
   const clearUploadedPhoto = () => {
     setPhotoBlob(null);
@@ -261,6 +280,7 @@ export function Contribute() {
               </motion.div>
 
               <LocationField
+                ref={locationFieldRef}
                 value={location}
                 onChange={setLocation}
                 disabled={submitting}

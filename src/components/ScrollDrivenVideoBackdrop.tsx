@@ -258,7 +258,7 @@ export function ScrollDrivenVideoBackdrop({ chapterRefs }: { chapterRefs: Chapte
     const y = window.scrollY;
     const vh = window.innerHeight;
 
-    /** Viewport “reading line” — crossfade feels tied to narrative flow */
+    /** Viewport "reading line": crossfade feels tied to narrative flow */
     const focusDocY = y + vh * 0.36;
 
     const rects = els.map((el) => el.getBoundingClientRect());
