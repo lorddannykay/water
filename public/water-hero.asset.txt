@@ -1,0 +1,11 @@
+Place the looping hero background video at:
+/water-hero.mp4
+
+Optional poster image:
+/water-hero-poster.jpg
+
+Recommended clip profile:
+- Resolution: 1920x1080 or 1280x720
+- Duration: 6-14 seconds
+- No visible branding or heavy color cast
+- Seamless loop with gentle water movement
