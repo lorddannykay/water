@@ -130,6 +130,73 @@ html.lang-ta .font-sans {
   display: none;
 }
 
+/* Failsafe: desktop links must not show on phones (Tailwind hidden can miss in some builds) */
+@media (max-width: 639px) {
+  .navbar-links {
+    display: none !important;
+  }
+}
+
+.navbar-menu-btn {
+  position: relative;
+  z-index: 2;
+}
+
+/* Portaled to body — full viewport overlay, above page content */
+.navbar-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: rgba(13, 20, 16, 0.45);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: min(100%, 20rem);
+  padding: max(5rem, calc(3.5rem + env(safe-area-inset-top, 0px))) 1.5rem
+    max(1.5rem, env(safe-area-inset-bottom, 0px));
+  border-left: 1px solid var(--color-border);
+  background: var(--color-bg);
+  box-shadow: -8px 0 40px rgba(13, 20, 16, 0.18);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.navbar-drawer__link {
+  display: block;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-dim);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.navbar-drawer__link:hover,
+.navbar-drawer__link:focus-visible {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  outline: none;
+}
+
 .section-shell {
   scroll-margin-top: max(100px, calc(4.5rem + env(safe-area-inset-top, 0px)));
 }
