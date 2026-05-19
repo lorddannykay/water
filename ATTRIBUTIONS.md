@@ -22,3 +22,8 @@ This project uses open map data and libraries. **End users must see OpenStreetMa
 ## Seed map imagery
 
 - Tamiraparani River seed photo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Tamirabarani_River_Thirunelveli.jpg) (used under Wikimedia Commons terms).
+
+## Hero sea shader
+
+- Animated water surface in the hero section: fragment shader adapted from [Shadertoy Ms2SD1](https://www.shadertoy.com/view/Ms2SD1) (see Shadertoy terms for that shader).
+- Rendered with [Three.js](https://threejs.org/).

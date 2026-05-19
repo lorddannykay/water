@@ -5,11 +5,15 @@ import {
   useSpring,
   useTransform,
 } from 'motion/react';
-import { useRef } from 'react';
+import { lazy, Suspense, useRef } from 'react';
 import { MapPin, Plus } from 'lucide-react';
 import { useTranslation } from '../../i18n/LanguageProvider';
 import { Section, SectionInner } from '../Section';
 import { scrollToSection } from '../../lib/utils';
+
+const HeroSeaBackdrop = lazy(() =>
+  import('../hero/HeroSeaBackdrop').then((m) => ({ default: m.HeroSeaBackdrop }))
+);
 
 export function Hero() {
   const { t } = useTranslation();
@@ -35,18 +39,23 @@ export function Hero() {
       reveal={false}
       className="relative min-h-[110vh] overflow-hidden pt-28 md:min-h-screen"
     >
+      <motion.div
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        style={{ y: bgY }}
+        aria-hidden
+      >
+        <div className="hero-sea-layer">
+          <Suspense fallback={null}>
+            <HeroSeaBackdrop reducedMotion={prefersReducedMotion} />
+          </Suspense>
+        </div>
+        <div className="hero-sea-bottom-fade" />
+      </motion.div>
+
       <div
         ref={scrollTargetRef}
         className="relative w-full min-h-[min(100vh,920px)]"
       >
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <motion.div style={{ y: bgY }} className="hero-ripples h-full w-full">
-            <div className="hero-ripple" />
-            <div className="hero-ripple" />
-            <div className="hero-ripple" />
-          </motion.div>
-        </div>
-
         <SectionInner>
           <motion.div style={{ opacity }} className="relative pt-2 pb-20 md:pt-4 md:pb-28">
             <p
@@ -112,32 +121,9 @@ export function Hero() {
           </motion.div>
         </SectionInner>
 
-        <div className="hero-waves" aria-hidden>
-          <svg
-            viewBox="0 0 1440 90"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              className="wave-path wave-path--1"
-              d="M0 45 C180 10 360 80 540 45 C720 10 900 80 1080 45 C1260 10 1440 80 1620 45 C1800 10 1980 80 2160 45 C2340 10 2520 80 2700 45 C2880 10 2880 80 2880 45 L2880 90 L0 90 Z"
-              fill="rgba(127,182,154,0.07)"
-            />
-            <path
-              className="wave-path wave-path--2"
-              d="M0 55 C160 25 320 75 480 55 C640 25 800 75 960 55 C1120 25 1280 75 1440 55 C1600 25 1760 75 1920 55 C2080 25 2240 75 2400 55 C2560 25 2720 75 2880 55 L2880 90 L0 90 Z"
-              fill="rgba(139,184,212,0.07)"
-            />
-            <path
-              className="wave-path wave-path--3"
-              d="M0 60 C200 35 400 78 600 60 C800 35 1000 78 1200 60 C1400 35 1600 78 1800 60 C2000 35 2200 78 2400 60 C2600 35 2800 78 2880 60 L2880 90 L0 90 Z"
-              fill="rgba(127,182,154,0.05)"
-            />
-          </svg>
-        </div>
       </div>
 
-      <SectionInner className="mt-12 md:mt-16">
+      <SectionInner className="relative mt-8 md:mt-12">
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

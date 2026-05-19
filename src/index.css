@@ -341,116 +341,93 @@ html.lang-ta .font-sans {
   }
 }
 
-/* Hero water ripples */
-.hero-ripples {
+/* Hero WebGL sea backdrop */
+.hero-sea-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-sea-backdrop {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 22%,
+    black 42%,
+    black 62%,
+    rgba(0, 0, 0, 0.55) 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 22%,
+    black 42%,
+    black 62%,
+    rgba(0, 0, 0, 0.55) 82%,
+    transparent 100%
+  );
 }
 
-.hero-ripples * {
+.hero-sea-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg) 0%,
+    rgba(247, 250, 246, 0.6) 28%,
+    rgba(247, 250, 246, 0.12) 52%,
+    rgba(247, 250, 246, 0.45) 78%,
+    var(--color-bg) 100%
+  );
 }
 
-.hero-ripple {
+.hero-sea-bottom-fade {
   position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(139, 184, 212, 0.25);
-  animation: hero-ripple-pulse 8s ease-out infinite;
-}
-
-.hero-ripple:nth-child(1) {
-  width: 320px;
-  height: 320px;
-  top: 15%;
-  right: 10%;
-  animation-delay: 0s;
-}
-
-.hero-ripple:nth-child(2) {
-  width: 480px;
-  height: 480px;
-  bottom: 10%;
-  left: 5%;
-  animation-delay: 2.5s;
-}
-
-.hero-ripple:nth-child(3) {
-  width: 200px;
-  height: 200px;
-  top: 50%;
-  left: 40%;
-  animation-delay: 5s;
-}
-
-@keyframes hero-ripple-pulse {
-  0% {
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.2;
-  }
-  100% {
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
-}
-
-/* Hero animated waves */
-.hero-waves {
-  position: absolute;
-  bottom: 0;
   left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
+  right: 0;
+  bottom: 0;
+  height: min(42vh, 380px);
   pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(247, 250, 246, 0.35) 35%,
+    rgba(247, 250, 246, 0.85) 70%,
+    var(--color-bg) 100%
+  );
 }
 
-.hero-waves * {
-  pointer-events: none;
+.hero-sea-backdrop__host {
+  position: absolute;
+  inset: 0;
 }
 
-.hero-waves svg {
+.hero-sea-backdrop__canvas {
   display: block;
-  width: calc(200% + 2px);
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0.42;
+  image-rendering: auto;
 }
 
-.wave-path {
-  animation: wave-flow linear infinite;
-  transform-origin: left center;
-  will-change: transform;
+#home.section-shell {
+  contain: layout paint;
 }
 
-.wave-path--1 {
-  animation-duration: 14s;
-}
-
-.wave-path--2 {
-  animation-duration: 20s;
-  animation-direction: reverse;
-}
-
-.wave-path--3 {
-  animation-duration: 26s;
-}
-
-@keyframes wave-flow {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wave-path {
-    animation: none;
-  }
+.hero-sea-backdrop--fallback {
+  background: linear-gradient(
+    165deg,
+    rgba(139, 184, 212, 0.12) 0%,
+    rgba(127, 182, 154, 0.18) 45%,
+    rgba(127, 182, 154, 0.08) 100%
+  );
 }
 
 /* Leaflet overrides */
@@ -875,8 +852,11 @@ html.lang-ta .font-sans {
 
   .page-ambience__wash,
   .page-ambience__depth,
-  .page-ambience__sheen,
-  .hero-ripple {
+  .page-ambience__sheen {
     animation: none;
+  }
+
+  .hero-sea-backdrop__canvas {
+    opacity: 0.28;
   }
 }
