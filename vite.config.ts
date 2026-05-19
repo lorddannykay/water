@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 const TUNNEL_ALLOWED_HOSTS = [
   '.loca.lt',
   '.trycloudflare.com',
@@ -20,7 +22,7 @@ export default defineConfig(({mode}) => {
   const tunnelMode = process.env.TUNNEL === '1';
   return {
     base: githubPagesBase(),
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), cloudflare()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
