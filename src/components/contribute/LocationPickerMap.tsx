@@ -12,6 +12,7 @@ import { MapAttribution } from '../map/MapAttribution';
 
 import { MAJOR_WATER_GUIDE_SITES } from '../map/majorWaterBodies';
 
+import { pickerMapProps } from '../map/mapLeafletOptions';
 import { PORUNAI_REGION_STYLE, TAMIL_NADU_DEFAULT_ZOOM } from '../map/mapConfig';
 
 import { PORUNAI_REGION_BOUNDS } from '../map/porunaiRegion';
@@ -204,13 +205,11 @@ export function LocationPickerMap({
 
         zoom={recenterZoom ?? mapZoom}
 
-        className="location-picker-map water-atlas-map"
-
-        scrollWheelZoom
-
-        attributionControl={false}
+        className="location-picker-map"
 
         aria-label="Pick location on map"
+
+        {...pickerMapProps}
 
       >
 

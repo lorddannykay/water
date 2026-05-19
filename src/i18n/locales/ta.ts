@@ -8,6 +8,8 @@ export const ta: Messages = {
     collective: 'கூட்டம்',
     contribute: 'பங்களிக்க',
     contact: 'தொடர்பு',
+    menuOpen: 'மெனுவைத் திற',
+    menuClose: 'மெனுவை மூடு',
   },
   brand: {
     title: 'நீர் பாரம்பரியத் திட்டம்',
@@ -87,6 +89,9 @@ export const ta: Messages = {
     mapLegendNote:
       'மென்மையான நீல வடிவங்கள் OpenStreetMap-லிருந்து ஏரி, குளங்கள். சிறிய நீல பின்கள் முக்கிய ஆறுகள் மற்றும் நீர்நிலைகள். பெரிய பின்கள் பாரம்பரிய இடங்கள்.',
     resolvingLocation: 'முகவரி தேடுகிறது…',
+    mapZoomHint: 'ஏரி, குளங்களைப் பார்க்க நெருக்கி அல்லது + பயன்படுத்தி பெரிதாக்குங்கள்',
+    mapZoomHintDismiss: 'பெரிதாக்கும் குறிப்பை மறை',
+    mapActivateHint: 'வரைபடத்தை ஆராய தட்டவும்',
   },
   collective: {
     label: 'கூட்டம்',

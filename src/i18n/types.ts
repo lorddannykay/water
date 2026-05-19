@@ -10,6 +10,8 @@ export type Messages = {
     collective: string;
     contribute: string;
     contact: string;
+    menuOpen: string;
+    menuClose: string;
   };
   brand: {
     title: string;
@@ -80,6 +82,9 @@ export type Messages = {
     mapPorunaiNote: string;
     mapLegendNote: string;
     resolvingLocation: string;
+    mapZoomHint: string;
+    mapZoomHintDismiss: string;
+    mapActivateHint: string;
   };
   collective: {
     label: string;

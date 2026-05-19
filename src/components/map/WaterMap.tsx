@@ -5,7 +5,10 @@ import { Loader2 } from 'lucide-react';
 import { useTranslation } from '../../i18n/LanguageProvider';
 import { BaseMapLayers } from './BaseMapLayers';
 import { MapAttribution } from './MapAttribution';
+import { MapGestureGuard } from './MapGestureGuard';
+import { MapZoomHint } from './MapZoomHint';
 import { MAJOR_WATER_GUIDE_SITES } from './majorWaterBodies';
+import { atlasMapProps } from './mapLeafletOptions';
 import {
   PORUNAI_REGION_STYLE,
   TAMIL_NADU_DEFAULT_ZOOM,
@@ -15,7 +18,14 @@ import { PORUNAI_REGION_BOUNDS } from './porunaiRegion';
 import { SitePopupContent } from './SitePopup';
 import { SEED_SITES, type WaterSite } from './siteData';
 
+function isCoarsePointer(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(pointer: coarse)').matches;
+}
+
 function createMarkerIcon(variant: 'default' | 'featured' | 'guide' | 'draft') {
+  const coarse = isCoarsePointer();
+  const scale = coarse ? 1.15 : 1;
   const cls =
     variant === 'featured'
       ? 'water-map-marker water-map-marker--featured'
@@ -24,12 +34,14 @@ function createMarkerIcon(variant: 'default' | 'featured' | 'guide' | 'draft') {
         : variant === 'draft'
           ? 'water-map-marker water-map-marker--draft'
           : 'water-map-marker';
-  const size =
+  const baseSize =
     variant === 'featured' ? 34 : variant === 'guide' ? 20 : variant === 'draft' ? 32 : 28;
+  const size = Math.round(baseSize * scale);
   const anchorY = size;
+  const tag = 'div';
   return L.divIcon({
     className: '',
-    html: `<div class="${cls}" aria-hidden="true"></div>`,
+    html: `<${tag} class="${cls}" aria-hidden="true"></${tag}>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, anchorY],
     popupAnchor: [0, -anchorY],
@@ -78,7 +90,7 @@ export function WaterMap({
   if (!markerIcon || !featuredIcon || !guideIcon || !draftIcon) {
     return (
       <div
-        className="flex h-[420px] w-full items-center justify-center rounded-2xl bg-surface text-dim md:h-[520px]"
+        className="water-atlas-map water-atlas-map--loading flex w-full items-center justify-center rounded-2xl bg-surface text-dim"
         role="status"
         aria-label={t('atlas.mapLoading')}
       >
@@ -93,13 +105,14 @@ export function WaterMap({
         <MapContainer
           center={TAMIL_NADU_MAP_CENTER}
           zoom={TAMIL_NADU_DEFAULT_ZOOM}
-          scrollWheelZoom={false}
-          attributionControl={false}
-          className="h-[420px] w-full md:h-[520px] water-atlas-map"
+          className="water-atlas-map w-full"
           aria-label={t('atlas.mapAria')}
+          {...atlasMapProps}
         >
           <BaseMapLayers />
           <Rectangle bounds={PORUNAI_REGION_BOUNDS} pathOptions={PORUNAI_REGION_STYLE} />
+          <MapGestureGuard />
+          <MapZoomHint />
           {MAJOR_WATER_GUIDE_SITES.map((site) => (
             <Marker
               key={String(site.id)}
@@ -144,7 +157,7 @@ export function WaterMap({
           </div>
         )}
         {onMapClick && !resolving && (
-          <p className="absolute bottom-3 left-1/2 z-[1000] max-w-[90%] -translate-x-1/2 rounded-full bg-white/90 px-4 py-1.5 text-center text-xs text-dim shadow-sm backdrop-blur-sm">
+          <p className="absolute bottom-14 left-1/2 z-[1000] max-w-[90%] -translate-x-1/2 rounded-full bg-white/90 px-4 py-1.5 text-center text-xs text-dim shadow-sm backdrop-blur-sm sm:bottom-3">
             {t('atlas.mapClickHint')}
           </p>
         )}

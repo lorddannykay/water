@@ -8,6 +8,8 @@ export const en: Messages = {
     collective: 'Collective',
     contribute: 'Contribute',
     contact: 'Contact',
+    menuOpen: 'Open menu',
+    menuClose: 'Close menu',
   },
   brand: {
     title: 'The Water Heritage Project',
@@ -87,6 +89,9 @@ export const en: Messages = {
     mapLegendNote:
       'Soft blue shapes are lakes and tanks from OpenStreetMap. Small blue pins mark major rivers and water bodies. Larger pins are heritage sites.',
     resolvingLocation: 'Finding address…',
+    mapZoomHint: 'Pinch or use + to zoom in and see lakes and tanks',
+    mapZoomHintDismiss: 'Dismiss zoom hint',
+    mapActivateHint: 'Tap to explore the map',
   },
   collective: {
     label: 'Collective',

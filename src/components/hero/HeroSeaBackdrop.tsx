@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
+import { HERO_SEA_THEME, SEA_VERTEX_SHADER } from './seaShaders';
 import {
-  HERO_SEA_THEME,
-  SEA_FRAGMENT_SHADER,
-  SEA_VERTEX_SHADER,
-} from './seaShaders';
-import { getSeaMaxDpr, getSeaRenderScale, prefersLowPowerSea } from './seaPerformance';
+  getSeaMaxDpr,
+  getSeaRenderScale,
+  pickSeaFragmentShader,
+  prefersLowPowerSea,
+  shouldUseMobileSeaShader,
+} from './seaPerformance';
 
 type HeroSeaBackdropProps = {
   reducedMotion?: boolean | null;
@@ -116,6 +118,7 @@ export function HeroSeaBackdrop({ reducedMotion = false }: HeroSeaBackdropProps)
       const mouseFollowSpeed = 2.8;
       const enableMouse =
         animate && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const enableScrollParallax = animate && !enableMouse;
 
       const setMouseFromEvent = (clientX: number, clientY: number) => {
         const rect = container.getBoundingClientRect();
@@ -140,10 +143,11 @@ export function HeroSeaBackdrop({ reducedMotion = false }: HeroSeaBackdropProps)
         sectionEl.addEventListener('pointerleave', onPointerLeave);
       }
 
+      let mobileShader = shouldUseMobileSeaShader();
       const material = new ShaderMaterial({
         uniforms,
         vertexShader: SEA_VERTEX_SHADER,
-        fragmentShader: SEA_FRAGMENT_SHADER,
+        fragmentShader: pickSeaFragmentShader(),
       });
 
       const mesh = new Mesh(new PlaneGeometry(2, 2), material);
@@ -154,18 +158,36 @@ export function HeroSeaBackdrop({ reducedMotion = false }: HeroSeaBackdropProps)
 
       const clock = new Clock();
 
+      const updateScrollParallax = () => {
+        if (!enableScrollParallax) return;
+        const section = container.closest('#home');
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        const span = Math.max(rect.height * 0.55, 1);
+        const progress = Math.min(1, Math.max(0, -rect.top / span));
+        mouseTarget.set((progress - 0.5) * 0.55, (progress - 0.5) * 0.28);
+      };
+
       const resize = () => {
         if (!renderer || disposed) return;
         const w = container.clientWidth;
         const h = container.clientHeight;
         if (w < 1 || h < 1) return;
 
+        const nextMobile = shouldUseMobileSeaShader();
+        if (nextMobile !== mobileShader) {
+          mobileShader = nextMobile;
+          material.fragmentShader = pickSeaFragmentShader();
+          material.needsUpdate = true;
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, getSeaMaxDpr()));
+        }
+
         const scale = getSeaRenderScale();
         const bufferW = Math.max(1, Math.floor(w * scale));
         const bufferH = Math.max(1, Math.floor(h * scale));
 
         renderer.setSize(bufferW, bufferH, false);
-        uniforms.iResolution.value.set(w, h);
+        uniforms.iResolution.value.set(bufferW, bufferH);
       };
 
       const renderFrame = () => {
@@ -174,7 +196,7 @@ export function HeroSeaBackdrop({ reducedMotion = false }: HeroSeaBackdropProps)
         if (animate && visible && tabActive) {
           uniforms.iGlobalTime.value += dt;
         }
-        if (enableMouse) {
+        if (enableMouse || enableScrollParallax) {
           const blend = 1 - Math.exp(-mouseFollowSpeed * dt);
           mouseSmooth.lerp(mouseTarget, blend);
           uniforms.uMouse.value.copy(mouseSmooth);
@@ -208,6 +230,14 @@ export function HeroSeaBackdrop({ reducedMotion = false }: HeroSeaBackdropProps)
       };
 
       resize();
+      updateScrollParallax();
+      const onScroll = () => {
+        updateScrollParallax();
+        if (visible && tabActive && animate) renderFrame();
+      };
+      if (enableScrollParallax) {
+        window.addEventListener('scroll', onScroll, { passive: true });
+      }
       const resizeObserver = new ResizeObserver(() => {
         resize();
         if (visible && tabActive && animate) renderFrame();
@@ -250,6 +280,9 @@ export function HeroSeaBackdrop({ reducedMotion = false }: HeroSeaBackdropProps)
         resizeObserver.disconnect();
         intersectionObserver.disconnect();
         document.removeEventListener('visibilitychange', onVisibility);
+        if (enableScrollParallax) {
+          window.removeEventListener('scroll', onScroll);
+        }
         if (enableMouse && sectionEl) {
           sectionEl.removeEventListener('pointermove', onPointerMove);
           sectionEl.removeEventListener('pointerleave', onPointerLeave);
